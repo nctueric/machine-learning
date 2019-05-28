@@ -13121,6 +13121,27 @@ div#notebook {
 Chia-Hua Chang <br>
 nctueric@gmail.com <br>
 May 31th, 2019</p>
+<h2 id="I.-Definition">I. Definition<a class="anchor-link" href="#I.-Definition">&#182;</a></h2><h3 id="Project-Overview">Project Overview<a class="anchor-link" href="#Project-Overview">&#182;</a></h3><p>Fraud risk is everywhere, but for companies that advertise online, click fraud can happen at an overwhelming volume, resulting in misleading click data and wasted money. Ad channels can drive up costs by simply clicking on the ad at a large scale. With over 1 billion smart mobile devices in active use every month, China is the largest mobile market in the world and therefore suffers from huge volumes of fraudulent traffic. In the paper, ‘Detecting Click Fraud in Online Advertising: A Data Mining Approach’ (JMLR, v.15 n.1, p.99-140, Jan. 2014), it summarize lots of observations and analyses of the fraud click detection. It also addressed some important issues in data mining and machine learning research, including highly imbalanced distribution of the output variable, heterogeneous data (mixture of numerical and categorical variables), and noisy patterns with missing or unknown values.</p>
+<p>TalkingData, China’s largest independent big data service platform, covers over 70% of active mobile devices nationwide. They handle 3 billion clicks per day, of which 90% are potentially fraudulent. Their current approach to prevent click fraud for app developers is to measure the journey of a user’s click across their portfolio, and flag IP addresses who produce lots of clicks, but never end up installing apps. With this information, they’ve built an IP blacklist and device blacklist.</p>
+<p>A generous dataset covering approximately 200 million clicks over 4 days is provided for this project. All of the necessary data sets can be found and download from: <a href="https://www.kaggle.com/c/talkingdata-adtracking-fraud-detection/data">https://www.kaggle.com/c/talkingdata-adtracking-fraud-detection/data</a></p>
+<p>There are about hundreds million recorded data and each data entry is with 8 features. It contains some features like: IP address of click, App. ID for marketing, operation system (OS) version ID of user mobile phone, device type ID of user mobile phone, the target that is to be predicted, indicating the app was downloaded, etc. Some features of data are encoded already. Except of two features are recorded in UTC time format.</p>
+<p>Ref: <a href="http://www.jmlr.org/papers/volume15/oentaryo14a/oentaryo14a.pdf">http://www.jmlr.org/papers/volume15/oentaryo14a/oentaryo14a.pdf</a></p>
+<h3 id="Problem-Statement">Problem Statement<a class="anchor-link" href="#Problem-Statement">&#182;</a></h3><p>The problem is quite straightforward: <strong>how to know whether a user will really download an app after clicking a mobile app ad? That is, how to distinguish between meaningful clicks and fraud clicks?</strong> Currently, TalkingData does have some methods to prevent click fraud. But there are still rooms for improvement. While successful, they can then always be one step ahead of those fraudsters. So our goal is to <strong>develop an algorithm/model which can precisely predict whether a user will download an app after clicking a mobile app ad based on the recorded properties of that user</strong>. The performance of model will be evaluated on area under the Receiver operating characteristic (ROC) curve between the predicted probability and the observed target. The smaller differences between our predictions and truths, the better our solution model will be. Then such model can be used to distinguish between meaningful clicks and fraud clicks and reduced the amount of wasted money caused by fraudulence.</p>
+<p><img src="image/flowchart.jpg" alt="Drawing" style="width: 400px;"/></p>
+<p>By following a very traditional but useful work flow, we first approach this problem by investigating the data. Through this exploratory data analysis, we can establish some basic ideas about the interrelationship between different features or the natural properties of each feature itself. We can even create some new features based on the existing features.</p>
+<p>Next, we have to check and clean the data. Maybe sometime our data will contain lots of different values or even missing values. So in feature engineering of data for our model developing, we will handle the problem of missing value and outliers, and/or normalize numeric features. If we have any categorical feature or text format feature, additional data preprocessing techniques will be included. For developing a proper model for our project, we now will split the whole training data set into to three pieces: one for training, another for validation and the other for testing. This step is for cross-validation.</p>
+<p>Basically, two kinds of classifiers will be built in this project: one is based on the neural network; the other is based on the random forest. Grid search method will be optional for finding the best combination of model’s parameters. Once we have finished training the models. They will be evaluated by using the evaluation metric, area under the Receiver operating characteristic curve (AUC). Models will be check thoroughly to see if there is anything insufficient.</p>
+<p>Kaggle’s official evaluation will be also taken into account. Depending on the performance of these models, we maybe have to go to some previous step to see if there is anything missing or wrong. Once we have an acceptable model (the one with better
+performance on evaluation and testing), whose score is at least over 0.92, we can stop and publish that model.</p>
+<h3 id="Metrics">Metrics<a class="anchor-link" href="#Metrics">&#182;</a></h3><p>Evaluation metric will be the area under the Receiver operating characteristic (ROC) curve between the predicted probability and the observed target. Such metric is also called as ‘AUC’. AUC as a further interpretation of ROC is a very straightforward and easy-understanding metric of a binary classifier system. Since now we are trying to establish a model to predict whether a user will download an app after clicking a mobile app or not. This is exactly a binary classification problem. Given a threshold parameter $T$, the instance is classified as “positive” if $X&gt;T$, and “negative” otherwise. $X$ follows a probability density $f_{1}(x)$ if the instance actually belongs to class “positive”, and $f_{0}(x)$ if otherwise. Therefore, the true positive rate is given by $TPR(T)=\int_{T}^{\infty}f_{1}(x)dx$ and the false positive rate is given by $FPR(T)=\int_{T}^{\infty}f_{0}(x)dx$.</p>
+<p>The ROC curve plots parametrically $TPR(T)$ versus $FPR(T)$ with $T$ as the varying parameter. Then the AUC is simply the area under the ROC. Generally, we can judge our model through the value of AUC like follows:</p>
+<ul>
+<li>AUC=0.5 (no discrimination)</li>
+<li>0.7 ≦ AUC ≦ 0.8 (acceptable discrimination)</li>
+<li>0.8 ≦ AUC ≦ 0.9 (excellent discrimination)</li>
+<li>0.9 ≦ AUC ≦ 1.0 (outstanding discrimination)</li>
+</ul>
+<p>Ref: <a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic">https://en.wikipedia.org/wiki/Receiver_operating_characteristic</a></p>
 <hr>
 
 </div>
@@ -13141,7 +13162,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -13186,7 +13207,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">sample_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/train_sample.csv&#39;</span><span class="p">)</span> <span class="c1"># sample data</span>
@@ -13305,7 +13326,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">test_data_kaggle</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/test.csv&#39;</span><span class="p">)</span> <span class="c1"># test data for kaggle leaderboard</span>
@@ -13455,7 +13476,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># full data</span>
@@ -13518,7 +13539,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># create a new feature which is based on the click time </span>
@@ -13759,7 +13780,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">checklist</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ip&#39;</span><span class="p">,</span> <span class="s1">&#39;app&#39;</span><span class="p">,</span> <span class="s1">&#39;device&#39;</span><span class="p">,</span> <span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="s1">&#39;click_hr&#39;</span><span class="p">]</span>
@@ -13786,7 +13807,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">unique</span> <span class="o">=</span> <span class="p">[]</span>
@@ -13842,7 +13863,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
@@ -13938,7 +13959,7 @@ May 31th, 2019</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
@@ -13955,13 +13976,13 @@ May 31th, 2019</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[10]:</div>
+    <div class="prompt output_prompt">Out[9]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0xce8f9e8&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0xc2a8a20&gt;</pre>
 </div>
 
 </div>
@@ -14061,7 +14082,7 @@ Ref.: <a href="http://contrib.scikit-learn.org/imbalanced-learn/stable/index.htm
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">imblearn.over_sampling</span> <span class="kn">import</span> <span class="n">SMOTE</span>
@@ -14162,7 +14183,7 @@ Ref: <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1466-8238.2007.0
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">prediction_converter</span><span class="p">(</span><span class="n">raw_preds</span><span class="p">,</span> <span class="n">inv</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -14183,7 +14204,7 @@ Ref: <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1466-8238.2007.0
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span> 
@@ -14269,7 +14290,7 @@ Ref: <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1466-8238.2007.0
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">evaluate_method</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="s1">&#39;recall&#39;</span><span class="p">,</span> <span class="s1">&#39;fscore&#39;</span><span class="p">]):</span>
@@ -14328,7 +14349,7 @@ Ref: <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1466-8238.2007.0
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">draw_AUC</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">test_data</span><span class="p">,</span> <span class="n">test_target</span><span class="p">):</span>
@@ -14370,7 +14391,7 @@ Ref: <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1466-8238.2007.0
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
@@ -14464,7 +14485,7 @@ Ref: <a href="https://arxiv.org/abs/1412.6980">https://arxiv.org/abs/1412.6980</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
@@ -14653,7 +14674,7 @@ Ref.: <a href="https://en.wikipedia.org/wiki/Activation_function">https://en.wik
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">draw_AUC_standalone</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_data</span><span class="p">,</span> <span class="n">test_target</span><span class="p">):</span>
@@ -14689,7 +14710,7 @@ Ref.: <a href="https://en.wikipedia.org/wiki/Activation_function">https://en.wik
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">custom_make_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -14718,7 +14739,7 @@ Ref.: <a href="https://en.wikipedia.org/wiki/Activation_function">https://en.wik
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>  
@@ -14777,17 +14798,17 @@ Ref.: <a href="https://en.wikipedia.org/wiki/Activation_function">https://en.wik
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:  1.0min
-[Parallel(n_jobs=4)]: Done 192 tasks      | elapsed:  7.6min
-[Parallel(n_jobs=4)]: Done 442 tasks      | elapsed: 13.9min
-[Parallel(n_jobs=4)]: Done 720 out of 720 | elapsed: 25.4min finished
+<pre>[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   59.0s
+[Parallel(n_jobs=4)]: Done 192 tasks      | elapsed:  7.5min
+[Parallel(n_jobs=4)]: Done 442 tasks      | elapsed: 14.1min
+[Parallel(n_jobs=4)]: Done 720 out of 720 | elapsed: 25.9min finished
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[21]:</div>
+    <div class="prompt output_prompt">Out[19]:</div>
 
 
 
@@ -14814,7 +14835,7 @@ Ref.: <a href="https://en.wikipedia.org/wiki/Activation_function">https://en.wik
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best parameters set found on development set:&quot;</span><span class="p">)</span>  
@@ -14866,7 +14887,7 @@ Ref.: <a href="https://en.wikipedia.org/wiki/Activation_function">https://en.wik
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># grid search of MLP classifier</span>
@@ -14911,11 +14932,11 @@ Ref.: <a href="https://en.wikipedia.org/wiki/Activation_function">https://en.wik
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:  1.8min
-[Parallel(n_jobs=4)]: Done 192 tasks      | elapsed: 10.6min
-[Parallel(n_jobs=4)]: Done 442 tasks      | elapsed: 30.7min
-[Parallel(n_jobs=4)]: Done 792 tasks      | elapsed: 51.4min
-[Parallel(n_jobs=4)]: Done 972 out of 972 | elapsed: 72.6min finished
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:  1.4min
+[Parallel(n_jobs=4)]: Done 192 tasks      | elapsed: 10.0min
+[Parallel(n_jobs=4)]: Done 442 tasks      | elapsed: 29.9min
+[Parallel(n_jobs=4)]: Done 792 tasks      | elapsed: 50.7min
+[Parallel(n_jobs=4)]: Done 972 out of 972 | elapsed: 71.7min finished
 C:\Users\MLUSER\Anaconda2-temp\lib\site-packages\sklearn\neural_network\multilayer_perceptron.py:562: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (3) reached and the optimization hasn&#39;t converged yet.
   % self.max_iter, ConvergenceWarning)
 </pre>
@@ -14924,7 +14945,7 @@ C:\Users\MLUSER\Anaconda2-temp\lib\site-packages\sklearn\neural_network\multilay
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[24]:</div>
+    <div class="prompt output_prompt">Out[21]:</div>
 
 
 
@@ -14952,7 +14973,7 @@ C:\Users\MLUSER\Anaconda2-temp\lib\site-packages\sklearn\neural_network\multilay
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best parameters set found on development set:&quot;</span><span class="p">)</span>  
@@ -15045,7 +15066,7 @@ C:\Users\MLUSER\Anaconda2-temp\lib\site-packages\sklearn\neural_network\multilay
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">RUN_KAGGLE_TEST</span> <span class="o">=</span> <span class="bp">False</span>
@@ -15113,7 +15134,7 @@ C:\Users\MLUSER\Anaconda2-temp\lib\site-packages\sklearn\neural_network\multilay
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># final model: random forest with &#39;max_features&#39;: 0.3, &#39;n_estimators&#39;: 50, \</span>
