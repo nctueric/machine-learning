@@ -1,11 +1,70 @@
 # Machine Learning Engineer Nanodegree
-## Specializations
-## Project: Capstone Proposal and Capstone Project
+# Capstone
+## Project: TalkingData AdTracking Fraud Detection Challenge (Kaggle Competition)
 
-**Note**
+### Install
 
-The Capstone is a two-staged project. The first is the proposal component, where you can receive valuable feedback about your project idea, design, and proposed solution. This must be completed prior to your implementation and submitting for the capstone project. 
+This project requires **Python 2.7** and the following Python libraries installed:
 
-You can find the [capstone proposal rubric here](https://review.udacity.com/#!/rubrics/410/view), and the [capstone project rubric here](https://review.udacity.com/#!/rubrics/108/view). Please ensure that you are following directions correctly before submitting these two stages which encapsulate your capstone.
+- [NumPy](http://www.numpy.org/)
+- [Pandas](http://pandas.pydata.org)
+- [matplotlib](http://matplotlib.org/)
+- [scikit-learn](http://scikit-learn.org/stable/)
+- [imbalanced-learn](http://contrib.scikit-learn.org/imbalanced-learn/stable/index.html)
+- [keras]
+- [Tensorflow]
 
-Please email [machine-support@udacity.com](mailto:machine-support@udacity.com) if you have any questions.
+You will also need to have software installed to run and execute an [iPython Notebook](http://ipython.org/notebook.html)
+
+We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project. 
+
+### Code
+
+capstone.ipynb
+
+### Run
+
+In a terminal or command window, navigate to the top-level project directory `capstone/` (that contains this README) and run one of the following commands:
+
+```bash
+ipython notebook capstone.ipynb
+```  
+or
+```bash
+jupyter notebook capstone.ipynb
+```
+
+This will open the iPython Notebook software and project file in your browser.
+
+### Data
+
+All the data can be download from: https://www.kaggle.com/c/talkingdata-adtracking-fraud-detection/data <br>
+Create a directory 'data' and put all the data files under it.
+
+**Features**
+Each row of the training data contains a click record, with the following features.
+
+- **ip**: ip address of click.
+- **app**: app id for marketing.
+- **device**: device type id of user mobile phone (e.g., iphone 6 plus, iphone 7, huawei mate 7, etc.)
+- **os**: os version id of user mobile phone
+- **channel**: channel id of mobile ad publisher
+- **click_time**: timestamp of click (UTC)
+- **attributed_time**: if user download the app for after clicking an ad, this is the time of the app download 
+- **is_attributed**: the target that is to be predicted, indicating the app was downloaded
+Note that ip, app, device, os, and channel are encoded.
+
+The test data for Kaggle Leaderboard ranking is similar, with the following differences:
+
+- **click_id**: reference for making predictions
+
+**Target Variable**
+- **is_attributed**: the target that is to be predicted, indicating the app was downloaded
+(not included in the test data for Kaggle Leaderboard ranking)
+
+### Important resource
+- anormaly detection: <br>
+  https://www.youtube.com/watch?v=086OcT-5DYI<br>
+  https://en.wikipedia.org/wiki/Anomaly_detection
+- Learning from imbalanced data: <br>
+  https://www.jeremyjordan.me/imbalanced-data/
